@@ -1,0 +1,9 @@
+boto3
+pandas
+pyodbc
+pylint
+pytest
+pytest-cov
+python-dotenv
+requests
+requests-mock
