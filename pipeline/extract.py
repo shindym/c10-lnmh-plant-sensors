@@ -1,4 +1,16 @@
 """This file is responsible for extracting data from the plant sensor API"""
+import requests
+
+
+def get_single_plant_data(plant_id: int) -> dict:
+    response = requests.get(
+        f"https://data-eng-plants-api.herokuapp.com/plants/{plant_id}")
+
+    json_data = response.json()
+
+    return json_data
+
 
 if __name__ == "__main__":
-    pass
+    p = get_single_plant_data(8)
+    print(p)
