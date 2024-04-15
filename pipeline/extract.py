@@ -9,11 +9,9 @@ def get_single_plant_data(plant_id: int) -> dict:
     """
 
     response = requests.get(
-        f"https://data-eng-plants-api.herokuapp.com/plants/{plant_id}")
+        f"https://data-eng-plants-api.herokuapp.com/plants/{plant_id}", timeout=10)
 
-    json_data = response.json()
-
-    return json_data
+    return response.json()
 
 
 if __name__ == "__main__":
