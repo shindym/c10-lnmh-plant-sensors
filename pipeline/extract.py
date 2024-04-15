@@ -4,8 +4,7 @@ import requests
 
 def get_single_plant_data(plant_id: int) -> dict:
     """
-    Contacts the api and uses the given plant_id to get to a
-    specific endpoint.
+    Contacts the api and uses the given plant_id to get to a specific endpoint.
     Returns the json data.
     """
 
