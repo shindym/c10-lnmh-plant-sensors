@@ -39,6 +39,8 @@
 ## ERD
 
 ## Architecture Diagram 
+![Architecture diagram](plant-sensor.drawio.png)
+[Architecture Diagram Draw.io](https://drive.google.com/file/d/1Nsyt_0f5EQxFlBw96zSqF63O9sbwYiOd/view?usp=sharing)
 
 ## Maintainers
 * [shindym](https://github.com/shindym)
