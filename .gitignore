@@ -1,0 +1,10 @@
+.env
+venv/
+
+.terraform
+*.tfvars
+*.tfstate
+
+*.log
+
+*.csv
