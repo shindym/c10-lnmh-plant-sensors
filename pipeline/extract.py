@@ -23,7 +23,12 @@ def get_single_plant_data(plant_id: int) -> dict:
     return json_data
 
 
-def extract_relevant_data(full_plant_data: dict):
+def extract_relevant_data(full_plant_data: dict) -> dict:
+    """
+    Given a dictionary retrieved from the API,
+    returns a non-nested dictionary with only the keys we are concerned with.
+    """
+
     if full_plant_data is None:
         return None
 
@@ -51,7 +56,11 @@ def extract_relevant_data(full_plant_data: dict):
     return filtered_plant_data
 
 
-def get_all_plant_data():
+def get_all_plant_data() -> list[dict]:
+    """
+    Returns a list of dictionaries with information for all plants
+    """
+
     total_plants = 50
     plants = []
 
@@ -63,10 +72,15 @@ def get_all_plant_data():
     return plants
 
 
-def create_plant_csv():
-    df = pd.DataFrame(get_all_plant_data())
+def create_plant_csv(plants: list[dict]) -> None:
+    """
+    Creates a csv given a list of dictionaries 
+    """
+
+    df = pd.DataFrame(plants)
     df.to_csv("plant_data.csv", index=False)
 
 
 if __name__ == "__main__":
-    create_plant_csv()
+    plants = get_all_plant_data()
+    create_plant_csv(plants)
