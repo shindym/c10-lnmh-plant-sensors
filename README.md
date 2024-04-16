@@ -37,7 +37,8 @@
 ## Files
 
 ## ERD
-
+![ERD diagram](plant-sensor-erd.png)
+[ERD Diagram drawsql](https://drawsql.app/teams/shindy/diagrams/plant-sensors)
 ## Architecture Diagram 
 ![Architecture diagram](plant-sensor.drawio.png)
 [Architecture Diagram Draw.io](https://drive.google.com/file/d/1Nsyt_0f5EQxFlBw96zSqF63O9sbwYiOd/view?usp=sharing)
