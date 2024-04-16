@@ -1,7 +1,7 @@
 boto3
 pandas
-pyodbc
 pylint
+pymssql
 pytest
 pytest-cov
 python-dotenv
