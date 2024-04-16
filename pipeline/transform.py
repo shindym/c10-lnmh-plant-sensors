@@ -4,6 +4,11 @@ from os import path
 import pandas as pd
 
 def extract_first_name_last_name(df: pd.DataFrame):
+    """
+    Splits up "botanist_name" into first_name and last_name.
+    Drops "botanist_name" column when done.
+    """
+
     df[['botanist_first_name', 'botanist_last_name']]= df['botanist_name'].str.split(' ', expand=True)
     first_name = df.pop("botanist_first_name")
     last_name = df.pop("botanist_last_name")
@@ -13,6 +18,11 @@ def extract_first_name_last_name(df: pd.DataFrame):
     return df
 
 def clean_data(filename: str):
+    """
+    Checks that soil moisture is between 0 and 100,
+    and temperature is between 0 and 50.
+    """
+
     if path.isfile(f"{filename}"):
         df = pd.read_csv(f"{filename}")
         df = extract_first_name_last_name(df)
