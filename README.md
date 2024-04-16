@@ -20,6 +20,7 @@
 - AWS CLI
 - Docker
 - Terraform
+- sqlcmd
 ### Imports
  ```sh
    pip3 install -r requirements.txt
@@ -31,6 +32,12 @@
 
 | KEY |FILE REQUIRED|
 | -------- | --------|
+|DB_HOST|`db-connect.sh`,`load.py`|
+|DB_PORT|`db-connect.sh`|
+|DB_USER|`db-connect.sh`,`load.py`|
+|DB_PASSWORD|`db-connect.sh`,`load.py`|
+|DB_NAME|`db-connect.sh`,`load.py`|
+|SCHEMA|`db-connect.sh`|
 
 ## Deployment
 
