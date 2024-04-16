@@ -1,12 +1,20 @@
+# enviorment
 .env
 venv/
 
+# terraform
 .terraform
 *.tfvars
 *.tfstate
 
+# logs
 *.log
 
+# data
 *.csv
-
 data
+
+# testing
+.pytest_cache
+__pycache__
+/coverage
