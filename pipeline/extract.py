@@ -78,7 +78,7 @@ def create_plant_csv(plants: list[dict]) -> None:
     """
 
     df = pd.DataFrame(plants)
-    df.to_csv("plant_data.csv", index=False)
+    df.to_csv("data/plant_data.csv", index=False)
 
 
 if __name__ == "__main__":
