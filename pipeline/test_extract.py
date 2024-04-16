@@ -36,7 +36,7 @@ def test_get_single_plant_data_nonexistent_returns_none(requests_mock):
 
 
 def test_extract_relevant_data_success():
-    """Tests that `get_single_plant_data` extracts all relevant data is correctly from a dictionary."""
+    """Tests that `extract_relevant_data` extracts all relevant data correctly from a dictionary."""
 
     full_plant_data = {
         "plant_id": 1,
@@ -62,13 +62,15 @@ def test_extract_relevant_data_success():
         "botanist_phone": "123-456-7890",
         "last_watered": "2024-04-10",
         "plant_name": "Bird of paradise",
-        "origin": "Area",
+        "origin_area": "Area",
+        "origin_latitude": "Latitude",
+        "origin_longitude": "Longitude",
         "recording_taken": "2024-04-15",
         "soil_moisture": 77,
         "temperature": 15,
     }
 
-    assert result == expected_result, "Extracted data does not match the expected result."
+    assert result == expected_result
 
 
 def test_missing_botanist_details():
