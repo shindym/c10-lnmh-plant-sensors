@@ -46,8 +46,12 @@ def extract_relevant_data(full_plant_data: dict) -> dict:
     filtered_plant_data["last_watered"] = full_plant_data.get(
         "last_watered", None)
     filtered_plant_data["plant_name"] = full_plant_data.get("name", None)
-    filtered_plant_data["origin"] = full_plant_data.get(
+    filtered_plant_data["origin_area"] = full_plant_data.get(
         "origin_location", [None, None, None, None, None])[2]
+    filtered_plant_data["origin_latitude"] = full_plant_data.get(
+        "origin_location", [None, None, None, None, None])[0]
+    filtered_plant_data["origin_longitude"] = full_plant_data.get(
+        "origin_location", [None, None, None, None, None])[1]
     filtered_plant_data["recording_taken"] = full_plant_data.get(
         "recording_taken", None)
     filtered_plant_data["soil_moisture"] = full_plant_data.get(
