@@ -1,4 +1,6 @@
 """This file is responsible for extracting data from the plant sensor API"""
+from os import makedirs, path
+
 import requests
 import pandas as pd
 
@@ -76,6 +78,9 @@ def create_plant_csv(plants: list[dict]) -> None:
     """
     Creates a csv given a list of dictionaries 
     """
+
+    if not path.exists('data/'):
+        makedirs('data/')
 
     df = pd.DataFrame(plants)
     df.to_csv("data/plant_data.csv", index=False)
