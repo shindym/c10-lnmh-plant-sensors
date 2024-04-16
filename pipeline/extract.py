@@ -61,6 +61,10 @@ def get_all_plant_data():
     return plants
 
 
-if __name__ == "__main__":
+def create_plant_csv():
     df = pd.DataFrame(get_all_plant_data())
     df.to_csv("plant_data.csv", index=False)
+
+
+if __name__ == "__main__":
+    create_plant_csv()
