@@ -97,4 +97,3 @@ def test_input_none_returns_none():
     result = extract_relevant_data(None)
 
     assert result is None
-
