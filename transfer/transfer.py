@@ -3,6 +3,7 @@ from os import environ
 
 from dotenv import load_dotenv
 from pymssql import connect
+import pandas as pd
 
 
 def get_db_connection(config):
@@ -20,5 +21,18 @@ def get_db_connection(config):
     )
 
 
+def retrieve_old_data(conn):
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT * FROM s_delta.recordings WHERE recording_taken < DATEADD(Day, DATEDIFF(Day, 0, GetDate())-1, 0)")
+        rows = cur.fetchall()
+
+    return pd.DataFrame(rows)
+
+
 if __name__ == "__main__":
     load_dotenv()
+
+    conn = get_db_connection(environ)
+    old_data = retrieve_old_data(conn)
+    print(old_data.head())
