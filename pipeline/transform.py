@@ -102,7 +102,7 @@ def add_botanist_id(filename: str, conn):
     df.insert(1, "last_watered", last_watered)
     df.insert(4, "plant_id", plant_id)
 
-    df.to_csv("data/clean_plant_data.csv", index=False)
+    df.to_csv(f"{environ['storage_folder']}/clean_plant_data.csv", index=False)
 
 
 if __name__ == "__main__":
@@ -110,5 +110,5 @@ if __name__ == "__main__":
 
     conn = get_db_connection(environ)
 
-    clean_data("data/plant_data.csv")
-    add_botanist_id("data/plant_data.csv", conn)
+    clean_data(f"{environ['storage_folder']}/plant_data.csv")
+    add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
