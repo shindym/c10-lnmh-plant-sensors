@@ -8,6 +8,11 @@ from pymssql import connect
 import pandas as pd
 
 
+LOCAL_FILE = "data/archived_data.csv"
+BUCKET = "cretaceous-paleogene"
+OBJECT_NAME = "archived_data.csv"
+
+
 def get_db_connection(config):
     """
     Returns a connection to a database.
@@ -63,15 +68,17 @@ def add_new_csv_to_bucket(aws_client, filename, bucket, object_name):
 
 if __name__ == "__main__":
     load_dotenv()
+
     s3_client = client(
         "s3", aws_access_key_id=environ["ACCESS_KEY_ID"], aws_secret_access_key=environ["SECRET_ACCESS_KEY"])
+
     conn = get_db_connection(environ)
     old_data = retrieve_old_data(conn)
 
-    get_archive_file(s3_client, "cretaceous-paleogene",
-                     "archived_data.csv", "data/archived_data.csv")
+    get_archive_file(s3_client, BUCKET,
+                     OBJECT_NAME, LOCAL_FILE)
 
-    append_to_csv("data/archived_data.csv", old_data)
+    append_to_csv(LOCAL_FILE, old_data)
 
     add_new_csv_to_bucket(
-        s3_client, "data/archived_data.csv", "cretaceous-paleogene", "archived_data.csv")
+        s3_client, LOCAL_FILE, BUCKET, OBJECT_NAME)
