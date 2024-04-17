@@ -2,9 +2,8 @@
 
 import pandas as pd
 import pytest
-from os import path
 
-from transform import extract_first_name_last_name, clean_data, add_botanist_id
+from transform import extract_first_name_last_name, clean_data
 
 
 def test_extract_valid_first_and_last_name():
