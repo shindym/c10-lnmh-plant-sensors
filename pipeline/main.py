@@ -14,11 +14,11 @@ def pipeline_process():
     create_plant_csv(plants)
     # transfer
     conn = get_db_connection(environ)
-    clean_data("data/plant_data.csv")
-    add_botanist_id("data/plant_data.csv", conn)
+    clean_data(f"{environ['storage_folder']}/plant_data.csv")
+    add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
     # load 
     conn = get_db_connection(environ)
-    data_to_upload = convert_to_list("data/clean_plant_data.csv")
+    data_to_upload = convert_to_list(f"{environ['storage_folder']}/clean_plant_data.csv")
     if data_to_upload:
         load_data(conn, data_to_upload)
         conn.close()
@@ -30,11 +30,11 @@ def handler(event: dict = None, context: dict = None) -> dict:
     create_plant_csv(plants)
     # transfer
     conn = get_db_connection(environ)
-    clean_data("data/plant_data.csv")
-    add_botanist_id("data/plant_data.csv", conn)
+    clean_data(f"{environ['storage_folder']}/plant_data.csv")
+    add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
     # load 
     conn = get_db_connection(environ)
-    data_to_upload = convert_to_list("data/clean_plant_data.csv")
+    data_to_upload = convert_to_list(f"{environ['storage_folder']}/clean_plant_data.csv")
     if data_to_upload:
         load_data(conn, data_to_upload)
         conn.close()

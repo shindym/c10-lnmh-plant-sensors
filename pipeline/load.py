@@ -1,6 +1,6 @@
 """This file is responsible for loading the clean data into the database"""
 
-from os import path, environ as ENV
+from os import path, environ
 
 from dotenv import load_dotenv
 from pymssql import connect
@@ -53,9 +53,9 @@ def load_data(conn, data):
 if __name__ == "__main__":
     load_dotenv()
 
-    conn = get_db_connection(ENV)
+    conn = get_db_connection(environ)
 
-    data_to_upload = convert_to_list("data/clean_plant_data.csv")
+    data_to_upload = convert_to_list(f"{environ['storage_folder']}/clean_plant_data.csv")
 
     if data_to_upload:
         load_data(conn, data_to_upload)
