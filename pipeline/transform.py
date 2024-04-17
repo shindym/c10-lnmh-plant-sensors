@@ -47,7 +47,7 @@ def clean_data(filename: str):
 
     if path.isfile(f"{filename}"):
         df = pd.read_csv(f"{filename}")
-        # df = extract_first_name_last_name(df)
+        df = extract_first_name_last_name(df)
         df = df[df['soil_moisture'] > 0]
         df = df[df['soil_moisture'] < 100]
         df = df[df['temperature'] > 0]
@@ -68,6 +68,11 @@ def clean_data(filename: str):
 
 
 def find_botanist_id(x, conn):
+    """
+    Checks cache to see if email has been seen before (and therefore the id too),
+    if not will access the database and find the id corresponding with this email.
+    """
+
     if x not in botanist_cache:
         with conn.cursor() as cur:
             cur.execute(
@@ -78,6 +83,11 @@ def find_botanist_id(x, conn):
 
 
 def add_botanist_id(filename: str, conn):
+    """
+    Shapes the data in a new csv for ease of use in the load script.
+    Also adds a botanist id.
+    """
+
     df = pd.read_csv(filename)
     df["botanist_id"] = df["botanist_email"].apply(
         find_botanist_id, args=(conn,))
