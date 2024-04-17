@@ -45,7 +45,10 @@ def extract_relevant_data(full_plant_data: dict) -> dict:
         "botanist", {"phone": None})["phone"]
     filtered_plant_data["last_watered"] = full_plant_data.get(
         "last_watered", None)
-    filtered_plant_data["plant_name"] = full_plant_data.get("name", None)
+    filtered_plant_data["plant_common_name"] = full_plant_data.get(
+        "name", None)
+    filtered_plant_data["plant_scientific_name"] = full_plant_data.get(
+        "scientific_name", [None])[0]
     filtered_plant_data["origin_area"] = full_plant_data.get(
         "origin_location", [None, None, None, None, None])[2]
     filtered_plant_data["origin_latitude"] = full_plant_data.get(
