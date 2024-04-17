@@ -8,7 +8,6 @@ from pymssql import connect
 import pandas as pd
 
 
-LOCAL_FILE = "data/archived_data.csv"
 BUCKET = "cretaceous-paleogene"
 OBJECT_NAME = "archived_data.csv"
 
@@ -94,12 +93,12 @@ def handler(event: dict = None, context: dict = None) -> dict:
     old_data = retrieve_old_data(conn)
 
     get_archive_file(s3_client, BUCKET,
-                     OBJECT_NAME, LOCAL_FILE)
+                     OBJECT_NAME, environ["LOCAL_FILE"])
 
-    append_to_csv(LOCAL_FILE, old_data)
+    append_to_csv(environ["LOCAL_FILE"], old_data)
 
     add_new_csv_to_bucket(
-        s3_client, LOCAL_FILE, BUCKET, OBJECT_NAME)
+        s3_client, environ["LOCAL_FILE"], BUCKET, OBJECT_NAME)
 
     return {
         "status": "Success!"
@@ -116,9 +115,9 @@ if __name__ == "__main__":
     old_data = retrieve_old_data(conn)
 
     get_archive_file(s3_client, BUCKET,
-                     OBJECT_NAME, LOCAL_FILE)
+                     OBJECT_NAME, environ["LOCAL_FILE"])
 
-    append_to_csv(LOCAL_FILE, old_data)
+    append_to_csv(environ["LOCAL_FILE"], old_data)
 
     add_new_csv_to_bucket(
-        s3_client, LOCAL_FILE, BUCKET, OBJECT_NAME)
+        s3_client, environ["LOCAL_FILE"], BUCKET, OBJECT_NAME)
