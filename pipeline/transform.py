@@ -39,7 +39,9 @@ def clean_data(filename: str):
         df["botanist_email"] = df["botanist_email"].astype("string")
         df["botanist_phone"] = df["botanist_phone"].astype("string")
         df["last_watered"] = pd.to_datetime(df["last_watered"])
-        df["plant_name"] = df["plant_name"].astype("string")
+        df["plant_common_name"] = df["plant_common_name"].astype("string")
+        df["plant_scientific_name"] = df["plant_scientific_name"].astype(
+            "string")
         df["origin_area"] = df["origin_area"].astype("string")
         df["recording_taken"] = df["recording_taken"].astype("datetime64[ns]")
 
