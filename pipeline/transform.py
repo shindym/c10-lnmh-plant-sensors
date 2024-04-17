@@ -24,7 +24,7 @@ def get_db_connection(config):
     )
 
 
-def extract_first_name_last_name(df: pd.DataFrame):
+def extract_first_name_last_name(df: pd.DataFrame) -> pd.DataFrame:
     """
     Splits up "botanist_name" into first_name and last_name.
     Drops "botanist_name" column when done.

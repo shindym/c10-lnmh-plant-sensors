@@ -18,9 +18,9 @@ def test_extract_valid_first_and_last_name():
 
     resulting_df = extract_first_name_last_name(df)
 
-    assert resulting_df["botanist_first_name"].tolist() == ["Gertrude", "Eliza"]
+    assert resulting_df["botanist_first_name"].tolist() == ["Gertrude", "Eliza"] # pylint: disable=unsubscriptable-object
 
-    assert resulting_df["botanist_last_name"].tolist() == ["Jekyll", "Andrews"]
+    assert resulting_df["botanist_last_name"].tolist() == ["Jekyll", "Andrews"] # pylint: disable=unsubscriptable-object
 
     assert "botanist_name" not in resulting_df.columns
 
