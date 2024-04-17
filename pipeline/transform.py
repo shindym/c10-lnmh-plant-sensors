@@ -83,6 +83,15 @@ def add_botanist_id(filename: str, conn):
         find_botanist_id, args=(conn,))
     df = df.drop(
         columns=["botanist_first_name", "botanist_last_name", "botanist_email", "botanist_phone", "plant_common_name", "plant_scientific_name", "origin_area", "origin_latitude", "origin_longitude"])
+
+    # Rearranging columns to make it easier in the load script
+    recording_taken = df.pop("recording_taken")
+    last_watered = df.pop("last_watered")
+    plant_id = df.pop("plant_id")
+    df.insert(0, "recording_taken", recording_taken)
+    df.insert(1, "last_watered", last_watered)
+    df.insert(4, "plant_id", plant_id)
+
     df.to_csv("data/clean_plant_data.csv", index=False)
 
 
