@@ -1,8 +1,9 @@
 """This file is responsible for extracting data from the plant sensor API"""
-from os import makedirs, path
-
+from os import makedirs, path,environ
 import requests
+from dotenv import load_dotenv
 import pandas as pd
+
 
 
 def get_single_plant_data(plant_id: int) -> dict:
@@ -86,13 +87,14 @@ def create_plant_csv(plants: list[dict]) -> None:
     Creates a csv given a list of dictionaries 
     """
 
-    if not path.exists('data/'):
-        makedirs('data/')
+    if not path.exists(f"{environ['storage_folder']}/"):
+        makedirs(f"{environ['storage_folder']}/")
 
     df = pd.DataFrame(plants)
-    df.to_csv("data/plant_data.csv", index=False)
+    df.to_csv(f"{environ['storage_folder']}/plant_data.csv", index=False)
 
 
 if __name__ == "__main__":
+    load_dotenv()
     plants = get_all_plant_data()
     create_plant_csv(plants)
