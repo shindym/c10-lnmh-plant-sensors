@@ -22,6 +22,10 @@ def get_db_connection(config):
 
 
 def retrieve_old_data(conn):
+    """
+    Retrieves data older than 24 hours
+    """
+
     with conn.cursor() as cur:
         cur.execute(
             "SELECT * FROM s_delta.recordings WHERE recording_taken < DATEADD(Day, DATEDIFF(Day, 0, GetDate())-1, 0)")
