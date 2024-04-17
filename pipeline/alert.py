@@ -1,7 +1,9 @@
+"""This file is responsible for alerting users/botanists via email about a plant having an issue."""
 from boto3 import client
 
 
 class Alerter():
+    """"This class is responsible for the functionality required to alert a botanists via email. """
 
     def __init__(self, config) -> None:
         self.ses_client = self.connect_to_ses_client(config)
