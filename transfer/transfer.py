@@ -82,6 +82,30 @@ def add_new_csv_to_bucket(aws_client, filename, bucket, object_name):
     aws_client.upload_file(filename, bucket, object_name)
 
 
+def handler(event: dict = None, context: dict = None) -> dict:
+    """
+    Adds logic from main into handler to be used in lambda.
+    """
+
+    s3_client = client(
+        "s3", aws_access_key_id=environ["ACCESS_KEY_ID"], aws_secret_access_key=environ["SECRET_ACCESS_KEY"])
+
+    conn = get_db_connection(environ)
+    old_data = retrieve_old_data(conn)
+
+    get_archive_file(s3_client, BUCKET,
+                     OBJECT_NAME, LOCAL_FILE)
+
+    append_to_csv(LOCAL_FILE, old_data)
+
+    add_new_csv_to_bucket(
+        s3_client, LOCAL_FILE, BUCKET, OBJECT_NAME)
+
+    return {
+        "status": "Success!"
+    }
+
+
 if __name__ == "__main__":
     load_dotenv()
 
