@@ -59,3 +59,5 @@ if __name__ == "__main__":
 
     if data_to_upload:
         load_data(conn, data_to_upload)
+
+    conn.close()
