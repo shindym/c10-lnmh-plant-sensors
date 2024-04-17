@@ -28,7 +28,7 @@ def retrieve_old_data(conn):
 
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT * FROM s_delta.recordings WHERE recording_taken < DATEADD(Day, DATEDIFF(Day, 0, GetDate())-1, 0)")
+            "SELECT * FROM s_delta.recordings WHERE recording_taken < GETDATE()-1;")
         rows = cur.fetchall()
 
     return pd.DataFrame(rows)
