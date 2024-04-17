@@ -1,5 +1,5 @@
 """This file contains script responsible for making a dashboard."""
-from os import environ as environ
+from os import environ
 import pandas as pd
 import streamlit as st
 import altair as alt
