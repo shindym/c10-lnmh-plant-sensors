@@ -101,6 +101,10 @@ def handler(event: dict = None, context: dict = None) -> dict:
     add_new_csv_to_bucket(
         s3_client, LOCAL_FILE, BUCKET, OBJECT_NAME)
 
+    return {
+        "status": "Success!"
+    }
+
 
 if __name__ == "__main__":
     load_dotenv()
