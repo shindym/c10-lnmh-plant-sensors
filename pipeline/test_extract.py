@@ -81,7 +81,8 @@ def test_extracts_relevant_data_successfully():
 
 def test_missing_botanist_details():
     """
-    Tests that `extract_relevant_data` handles missing botanist details by returning None for each key.
+    Tests that `extract_relevant_data` handles
+    missing botanist details by returning None for each key.
     """
 
     full_plant_data = {
