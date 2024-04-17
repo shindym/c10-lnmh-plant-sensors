@@ -4,7 +4,7 @@ DROP TABLE s_delta.plant
 DROP TABLE s_delta.origin
 DROP TABLE s_delta.botanist
 
-
+-- table definitions for the database.
 CREATE TABLE s_delta.botanist(
     botanist_id INT IDENTITY(1, 1) PRIMARY KEY,
     first_name varchar(25) NOT NULL,
@@ -44,6 +44,7 @@ CREATE TABLE s_delta.recordings(
 );
 GO
 
+-- Seeding the database.
 INSERT INTO s_delta.botanist(first_name,last_name,email,phone_num) VALUES ('Carl','Linnaeus','carl.linnaeus@lnhm.co.uk','(146)994-1635x35992'),
 ('Gertrude','Jekyll','gertrude.jekyll@lnhm.co.uk','001-481-273-3691x127'),
 ('Eliza','Andrews','eliza.andrews@lnhm.co.uk','(846)669-6651x75948');
