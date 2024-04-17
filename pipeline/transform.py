@@ -1,7 +1,26 @@
 """This file is responsible for cleaning and preparing plant data"""
-from os import path
+from os import path, environ
 
 import pandas as pd
+from dotenv import load_dotenv
+from pymssql import connect
+
+botanist_cache = {}
+
+
+def get_db_connection(config):
+    """
+    Returns a connection to a database.
+    """
+
+    return connect(
+        server=config["DB_HOST"],
+        user=config["DB_USER"],
+        password=config["DB_PASSWORD"],
+        database=config["DB_NAME"],
+        port=config["DB_PORT"],
+        as_dict=True
+    )
 
 
 def extract_first_name_last_name(df: pd.DataFrame):
@@ -28,7 +47,7 @@ def clean_data(filename: str):
 
     if path.isfile(f"{filename}"):
         df = pd.read_csv(f"{filename}")
-        df = extract_first_name_last_name(df)
+        # df = extract_first_name_last_name(df)
         df = df[df['soil_moisture'] > 0]
         df = df[df['soil_moisture'] < 100]
         df = df[df['temperature'] > 0]
@@ -48,5 +67,29 @@ def clean_data(filename: str):
         df.to_csv(filename, index=False)
 
 
+def find_botanist_id(x, conn):
+    if x not in botanist_cache:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT botanist_id FROM s_delta.botanist WHERE s_delta.botanist.email = %s", x)
+            row = cur.fetchone()
+        botanist_cache[x] = int(row["botanist_id"])
+    return botanist_cache[x]
+
+
+def add_botanist_id(filename: str, conn):
+    df = pd.read_csv(filename)
+    df["botanist_id"] = df["botanist_email"].apply(
+        find_botanist_id, args=(conn,))
+    df = df.drop(
+        columns=["botanist_first_name", "botanist_last_name", "botanist_email", "botanist_phone", "plant_common_name", "plant_scientific_name", "origin_area", "origin_latitude", "origin_longitude"])
+    df.to_csv("data/clean_plant_data.csv", index=False)
+
+
 if __name__ == "__main__":
+    load_dotenv()
+
+    conn = get_db_connection(environ)
+
     clean_data("data/plant_data.csv")
+    add_botanist_id("data/plant_data.csv", conn)
