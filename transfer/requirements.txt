@@ -1,0 +1,6 @@
+boto3
+pandas
+pylint
+pymssql
+pytest
+python-dotenv
