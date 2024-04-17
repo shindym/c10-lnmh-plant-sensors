@@ -1,4 +1,5 @@
 """This file is responsible for cleaning and preparing plant data"""
+
 from os import path, environ
 
 import pandas as pd
@@ -30,7 +31,7 @@ def extract_first_name_last_name(df: pd.DataFrame):
     """
 
     df[['botanist_first_name', 'botanist_last_name']
-       ] = df['botanist_name'].str.split(' ', expand=True)
+    ] = df['botanist_name'].str.split(' ', expand=True)
     first_name = df.pop("botanist_first_name")
     last_name = df.pop("botanist_last_name")
     df.insert(1, "botanist_first_name", first_name)
@@ -92,7 +93,8 @@ def add_botanist_id(filename: str, conn):
     df["botanist_id"] = df["botanist_email"].apply(
         find_botanist_id, args=(conn,))
     df = df.drop(
-        columns=["botanist_first_name", "botanist_last_name", "botanist_email", "botanist_phone", "plant_common_name", "plant_scientific_name", "origin_area", "origin_latitude", "origin_longitude"])
+        columns=["botanist_first_name", "botanist_last_name", "botanist_email", "botanist_phone", "plant_common_name",
+                 "plant_scientific_name", "origin_area", "origin_latitude", "origin_longitude"])
 
     # Rearranging columns to make it easier in the load script
     recording_taken = df.pop("recording_taken")
