@@ -1,6 +1,8 @@
 """This file is responsible for transfer old data from the sql server to an s3 bucket"""
 from os import environ
 
+from boto3 import client
+import botocore
 from dotenv import load_dotenv
 from pymssql import connect
 import pandas as pd
@@ -30,13 +32,51 @@ def retrieve_old_data(conn):
         cur.execute(
             "SELECT * FROM s_delta.recordings WHERE recording_taken < GETDATE()-1;")
         rows = cur.fetchall()
+        cur.execute(
+            "DELETE FROM s_delta.recordings WHERE recording_taken < GETDATE()-1;")
+    conn.commit()
 
     return pd.DataFrame(rows)
 
 
+def get_archive_file(aws_client, bucket_name, obj_name, download_path):
+    try:
+        aws_client.download_file(bucket_name, obj_name, download_path)
+    except botocore.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == "404":
+            with open(download_path, "w") as f:
+                pass
+
+
+def append_to_csv(csv, archive_data):
+    try:
+        pd.read_csv(csv)
+    except pd.errors.EmptyDataError:
+        df.to_csv(csv, index=False)
+    else:
+        archive_data.to_csv(csv, mode="a", index=False, header=False)
+
+
+def add_new_csv_to_bucket():
+    pass
+
+
 if __name__ == "__main__":
     load_dotenv()
+    s3_client = client(
+        "s3", aws_access_key_id=environ["ACCESS_KEY_ID"], aws_secret_access_key=environ["SECRET_ACCESS_KEY"])
+    # conn = get_db_connection(environ)
+    # old_data = retrieve_old_data(conn)
+    data = {
+        'Name': ['Hardik', 'Pollard', 'Bravo'],
+        'Run': [50, 63, 15],
+        'Wicket': [0, 2, 3],
+        'Catch': [4, 2, 1]
+    }
 
-    conn = get_db_connection(environ)
-    old_data = retrieve_old_data(conn)
-    print(old_data.head())
+# Make data frame of above data
+    df = pd.DataFrame(data)
+    # get_archive_file(s3_client, "cretaceous-paleogene",
+    #                  "archived_data.csv", "data/archived_data.csv")
+
+    append_to_csv("data/archived_data.csv", df)
