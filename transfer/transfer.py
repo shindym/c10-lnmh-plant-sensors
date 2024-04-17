@@ -45,6 +45,12 @@ def retrieve_old_data(conn):
 
 
 def get_archive_file(aws_client, bucket_name, obj_name, download_path):
+    """
+    Checks to see if the desired file exists in the s3 bucket:
+    - If so, this is downloaded.
+    - Otherwise, the desired file is created locally.
+    """
+
     try:
         aws_client.download_file(bucket_name, obj_name, download_path)
     except botocore.exceptions.ClientError as e:
@@ -54,6 +60,12 @@ def get_archive_file(aws_client, bucket_name, obj_name, download_path):
 
 
 def append_to_csv(csv, archive_data):
+    """
+    Checks if the csv found/made is empty.
+    Will either write to or append to the csv, 
+    depending on the former condition.
+    """
+
     try:
         pd.read_csv(csv)
     except pd.errors.EmptyDataError:
@@ -63,6 +75,10 @@ def append_to_csv(csv, archive_data):
 
 
 def add_new_csv_to_bucket(aws_client, filename, bucket, object_name):
+    """
+    Uploads the updated csv into the bucket.
+    """
+
     aws_client.upload_file(filename, bucket, object_name)
 
 
