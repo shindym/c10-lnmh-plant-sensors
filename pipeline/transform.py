@@ -163,6 +163,6 @@ if __name__ == "__main__":
 
     conn = get_db_connection(environ)
 
-    # clean_data(f"{environ['storage_folder']}/plant_data.csv")
-    # add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
+    clean_data(f"{environ['storage_folder']}/plant_data.csv")
+    add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
     send_alerts(conn)
