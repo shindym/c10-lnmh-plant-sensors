@@ -6,6 +6,8 @@ import pandas as pd
 from dotenv import load_dotenv
 from pymssql import connect
 
+from alert import Alerter
+
 botanist_cache = {}
 
 
@@ -31,7 +33,7 @@ def extract_first_name_last_name(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     df[['botanist_first_name', 'botanist_last_name']
-    ] = df['botanist_name'].str.split(' ', expand=True)
+       ] = df['botanist_name'].str.split(' ', expand=True)
     first_name = df.pop("botanist_first_name")
     last_name = df.pop("botanist_last_name")
     df.insert(1, "botanist_first_name", first_name)
@@ -112,6 +114,50 @@ def add_botanist_id(filename: str, conn):
     df.to_csv(f"{environ['storage_folder']}/clean_plant_data.csv", index=False)
 
 
+def send_alerts(conn):
+    """
+    Determines if the current values of soil_moisture and temperature are alert-worthy,
+    sends an alert if so.
+    """
+
+    alerter = Alerter(environ)
+    emails = alerter.get_email_addresses_from_names(
+        ["setinder.manic", "ariba.syeda", "lucie.gamby"])
+
+    current = pd.read_csv(f"{environ['storage_folder']}/clean_plant_data.csv")
+
+    plants = current["plant_id"].to_list()
+
+    # Checking for temperature fluctuations
+    i = 0
+    for plant in plants:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT TOP 3 * FROM s_delta.recordings WHERE plant_id = %s ORDER BY recording_taken DESC;", plant)
+            row = cur.fetchall()
+            this_plant = current[current["plant_id"] == plant].to_dict()
+
+            # Checks for temperature fluctuations (accounts for erroneous spikes)
+            if abs(row[0]["temperature"] - row[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - row[0]["temperature"]) < 3 and abs(row[1]["temperature"] - row[2]["temperature"]) < 3:
+                # Send alert, temp fluctuation detected
+                alerter.send_plain_email(
+                    emails, "Plant {plant_num} Alert", f"Temperature fluctuation detected for plant {plant}!")
+            i += 1
+
+    # Checking average soil moisture
+    if current["soil_moisture"].mean() < 15:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT soil_moisture FROM s_delta.recordings;", plant)
+            rows = pd.DataFrame(cur.fetchall())
+            recent_rows = rows.tail(len(plants))
+            average = recent_rows["soil_moisture"].mean()
+            if average > 15:
+                # Send alert, average moisture too low
+                alerter.send_plain_email(
+                    emails, "Soil Moisture Alert", f"Average soil moisture is below 15 - plants need watering!")
+
+
 if __name__ == "__main__":
     load_dotenv()
 
@@ -119,3 +165,4 @@ if __name__ == "__main__":
 
     clean_data(f"{environ['storage_folder']}/plant_data.csv")
     add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
+    send_alerts(conn)

@@ -27,7 +27,7 @@ class Alerter():
                     email_list.append(email['IdentityName'])
         return email_list
 
-    def send_plain_email(self, emails: list[str], plant_num: int, source_email: str = 'trainee.setinder.manic@sigmalabs.co.uk'):
+    def send_plain_email(self, emails: list[str], subject: str, body: str, source_email: str = 'trainee.setinder.manic@sigmalabs.co.uk'):
         """Sends an email out to a number of email addresses."""
         self.ses_client.send_email(
             FromEmailAddress=source_email,
@@ -37,7 +37,7 @@ class Alerter():
             Content={
                 'Simple': {
                     'Subject': {
-                        'Data': f"Plant {plant_num} Alert",
+                        'Data': f'{subject}',
                         'Charset': "UTF-8"
                     },
                     'Body': {
@@ -46,7 +46,7 @@ class Alerter():
                             'Charset': "UTF-8"
                         },
                         'Html': {
-                            'Data': 'There is an issue with this plant. In-person investigation required.',
+                            'Data': f'{body}',
                             'Charset': "UTF-8"
                         }
                     },
