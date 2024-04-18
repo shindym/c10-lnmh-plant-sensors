@@ -146,7 +146,7 @@ def send_alerts(conn):
                     alerter.send_plain_email(
                         emails, plant, f"Temperature fluctuation detected for plant {plant}!")
 
-                # Checks whether soil moisture is below 15
+                # Checks whether soil moisture is below 15, takes into account previous readings to avoid duplicate emails.
                 if all(x["soil_moisture"] > 15 for x in rows) and this_plant["soil_moisture"][i] < 15:
                     # Send alert, soil moisture too low
                     alerter.send_plain_email(
