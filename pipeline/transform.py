@@ -121,6 +121,9 @@ def send_alerts(conn):
     """
 
     alerter = Alerter(environ)
+    emails = alerter.get_email_addresses_from_names(
+        ["setinder.manic", "ariba.syeda", "lucie.gamby"])
+
     current = pd.read_csv(f"{environ['storage_folder']}/clean_plant_data.csv")
 
     plants = current["plant_id"].to_list()
@@ -137,7 +140,8 @@ def send_alerts(conn):
             # Checks for temperature fluctuations (accounts for erroneous spikes)
             if abs(row[0]["temperature"] - row[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - row[0]["temperature"]) < 3 and abs(row[1]["temperature"] - row[2]["temperature"]) < 3:
                 # Send alert, temp fluctuation detected
-                print(f"Temp fluctuation detected for plant {plant}")
+                alerter.send_plain_email(
+                    emails, "Plant {plant_num} Alert", f"Temperature fluctuation detected for plant {plant}")
             i += 1
 
     # Checking average soil moisture
@@ -151,6 +155,8 @@ def send_alerts(conn):
             if average > 15:
                 # Send alert, average moisture too low
                 print("Plants need watering")
+                alerter.send_plain_email(
+                    emails, "Soil Moisture Alert", f"Average soil moisture is below 15 - plants need watering")
 
 
 if __name__ == "__main__":
