@@ -115,10 +115,17 @@ def add_botanist_id(filename: str, conn):
 
 
 def send_alerts(conn):
+    """
+    Determines if the current values of soil_moisture and temperature are alert-worthy,
+    sends an alert if so.
+    """
+
     alerter = Alerter(environ)
     current = pd.read_csv(f"{environ['storage_folder']}/clean_plant_data.csv")
 
     plants = current["plant_id"].to_list()
+
+    # Checking for temperature fluctuations
     i = 0
     for plant in plants:
         with conn.cursor() as cur:
@@ -129,10 +136,11 @@ def send_alerts(conn):
 
             # Checks for temperature fluctuations (accounts for erroneous spikes)
             if abs(row[0]["temperature"] - row[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - row[0]["temperature"]) < 3 and abs(row[1]["temperature"] - row[2]["temperature"]) < 3:
-                # Temp Fluctuation detected, send alert
+                # Send alert, temp fluctuation detected
                 print(f"Temp fluctuation detected for plant {plant}")
             i += 1
 
+    # Checking average soil moisture
     if current["soil_moisture"].mean() < 15:
         with conn.cursor() as cur:
             cur.execute(
