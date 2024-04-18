@@ -134,28 +134,24 @@ def send_alerts(conn):
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT TOP 3 * FROM s_delta.recordings WHERE plant_id = %s ORDER BY recording_taken DESC;", plant)
-            row = cur.fetchall()
+            rows = cur.fetchall()
             this_plant = current[current["plant_id"] == plant].to_dict()
+            print(len(rows))
 
-            # Checks for temperature fluctuations (accounts for erroneous spikes)
-            if abs(row[0]["temperature"] - row[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - row[0]["temperature"]) < 3 and abs(row[1]["temperature"] - row[2]["temperature"]) < 3:
-                # Send alert, temp fluctuation detected
-                alerter.send_plain_email(
-                    emails, "Plant {plant_num} Alert", f"Temperature fluctuation detected for plant {plant}!")
+            if len(rows) == 3:
+
+                # Checks for temperature fluctuations (accounts for erroneous spikes)
+                if abs(rows[0]["temperature"] - rows[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - rows[0]["temperature"]) < 3 and abs(rows[1]["temperature"] - rows[2]["temperature"]) < 3:
+                    # Send alert, temp fluctuation detected
+                    alerter.send_plain_email(
+                        emails, plant, f"Temperature fluctuation detected for plant {plant}!")
+
+                # Checks whether soil moisture is below 15, takes into account previous readings to avoid duplicate emails.
+                if all(x["soil_moisture"] > 15 for x in rows) and this_plant["soil_moisture"][i] < 15:
+                    # Send alert, soil moisture too low
+                    alerter.send_plain_email(
+                        emails, plant, f"Soil moisture below 15 for plant {plant}!")
             i += 1
-
-    # Checking average soil moisture
-    if current["soil_moisture"].mean() < 15:
-        with conn.cursor() as cur:
-            cur.execute(
-                "SELECT soil_moisture FROM s_delta.recordings;", plant)
-            rows = pd.DataFrame(cur.fetchall())
-            recent_rows = rows.tail(len(plants))
-            average = recent_rows["soil_moisture"].mean()
-            if average > 15:
-                # Send alert, average moisture too low
-                alerter.send_plain_email(
-                    emails, "Soil Moisture Alert", f"Average soil moisture is below 15 - plants need watering!")
 
 
 if __name__ == "__main__":
@@ -163,6 +159,6 @@ if __name__ == "__main__":
 
     conn = get_db_connection(environ)
 
-    clean_data(f"{environ['storage_folder']}/plant_data.csv")
-    add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
+    # clean_data(f"{environ['storage_folder']}/plant_data.csv")
+    # add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
     send_alerts(conn)
