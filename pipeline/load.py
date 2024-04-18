@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from pymssql import connect
 import pandas as pd
 
-INSERT_RECORDING_QUERY = """
+PLANT_DATA_INSERT_QUERY = """
 INSERT INTO 
     s_delta.recordings (recording_taken, last_watered, soil_moisture, temperature, plant_id, botanist_id)
 VALUES 
@@ -30,12 +30,16 @@ def get_db_connection(config):
 
 
 def convert_to_list(filename):
-    """Converts a DataFrame to a list of tuples."""
+    """
+    Converts a DataFrame to a list of tuples.
+    """
 
-    if path.isfile(f"{filename}"):
+    try:
         df = pd.read_csv(filename)
-
         return df.to_records(index=False).tolist() if not df.empty else None
+
+    except (FileNotFoundError, pd.errors.EmptyDataError):
+        return None
 
 
 def load_data(conn, data):
@@ -44,8 +48,7 @@ def load_data(conn, data):
     """
 
     with conn.cursor() as cur:
-
-        cur.executemany(INSERT_RECORDING_QUERY, data)
+        cur.executemany(PLANT_DATA_INSERT_QUERY, data)
 
     conn.commit()
 
