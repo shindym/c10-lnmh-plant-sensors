@@ -6,6 +6,8 @@ venv/
 .terraform
 *.tfvars
 *.tfstate
+*.lock.hcl
+*tfstate.backup
 
 # logs
 *.log
