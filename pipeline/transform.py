@@ -141,7 +141,7 @@ def send_alerts(conn):
             if abs(row[0]["temperature"] - row[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - row[0]["temperature"]) < 3 and abs(row[1]["temperature"] - row[2]["temperature"]) < 3:
                 # Send alert, temp fluctuation detected
                 alerter.send_plain_email(
-                    emails, "Plant {plant_num} Alert", f"Temperature fluctuation detected for plant {plant}")
+                    emails, "Plant {plant_num} Alert", f"Temperature fluctuation detected for plant {plant}!")
             i += 1
 
     # Checking average soil moisture
@@ -154,9 +154,8 @@ def send_alerts(conn):
             average = recent_rows["soil_moisture"].mean()
             if average > 15:
                 # Send alert, average moisture too low
-                print("Plants need watering")
                 alerter.send_plain_email(
-                    emails, "Soil Moisture Alert", f"Average soil moisture is below 15 - plants need watering")
+                    emails, "Soil Moisture Alert", f"Average soil moisture is below 15 - plants need watering!")
 
 
 if __name__ == "__main__":
