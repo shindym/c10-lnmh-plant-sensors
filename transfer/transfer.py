@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from pymssql import connect
 import pandas as pd
 
-
 BUCKET = "cretaceous-paleogene"
 OBJECT_NAME = "archived_data.csv"
 
@@ -28,7 +27,7 @@ def get_db_connection(config):
     )
 
 
-def retrieve_old_data(conn):
+def retrieve_old_data(conn) -> pd.DataFrame:
     """
     Retrieves data older than 24 hours.
     """
@@ -44,7 +43,7 @@ def retrieve_old_data(conn):
     return pd.DataFrame(rows)
 
 
-def get_archive_file(aws_client, bucket_name, obj_name, download_path):
+def get_archive_file(aws_client, bucket_name: str, obj_name: str, download_path: str) -> None:
     """
     Checks to see if the desired file exists in the s3 bucket:
     - If so, this is downloaded.
@@ -59,7 +58,7 @@ def get_archive_file(aws_client, bucket_name, obj_name, download_path):
                 pass
 
 
-def append_to_csv(csv, archive_data):
+def append_to_csv(csv, archive_data: pd.DataFrame) -> None:
     """
     Checks if the csv found/made is empty.
     Will either write to or append to the csv, 
@@ -74,7 +73,7 @@ def append_to_csv(csv, archive_data):
         archive_data.to_csv(csv, mode="a", index=False, header=False)
 
 
-def add_new_csv_to_bucket(aws_client, filename, bucket, object_name):
+def add_new_csv_to_bucket(aws_client, filename: str, bucket: str, object_name: str):
     """
     Uploads the updated csv into the bucket.
     """
