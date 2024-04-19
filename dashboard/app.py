@@ -26,16 +26,15 @@ def get_db_connection(config):
 
 
 def connect_to_s3(config):
-
     """
     Returns s3 client object.
     """
 
-    s3 = client('s3', aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
-                aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY'])
+    s3 = client('s3', aws_access_key_id=config['ACCESS_KEY_ID'],
+                aws_secret_access_key=config['SECRET_ACCESS_KEY'])
 
     return s3
-  
+
 
 def download_data_from_s3(client_obj) -> None:
     """
@@ -86,9 +85,11 @@ if __name__ == "__main__":
     choice = st.sidebar.selectbox('Select a plant:', plant_list)
     x_days_ago = pd.Timestamp.now() - pd.Timedelta(days=x_days, hours=1)
 
-    relevant_plant_recordings = recording_data[recording_data["plant_id"].isin(plant_list)]
+    relevant_plant_recordings = recording_data[recording_data["plant_id"].isin(
+        plant_list)]
     relevant_plant_data = plant_data[plant_data["plant_id"].isin(plant_list)]
-    relevant_archived_data = archived_data[archived_data["plant_id"].isin(plant_list)]
+    relevant_archived_data = archived_data[archived_data["plant_id"].isin(
+        plant_list)]
 
     plant_num = relevant_plant_data['plant_id'].count()
     botanist_num = botanist_data['botanist_id'].count()
@@ -96,16 +97,18 @@ if __name__ == "__main__":
     previous_day = pd.Timestamp.now() - pd.Timedelta(days=1, hours=1)
 
     average_plant_moisture_ten_mins_ago = relevant_plant_recordings[relevant_plant_recordings['recording_taken'] > ten_minutes_ago][
-            'soil_moisture'].mean().round(2)
+        'soil_moisture'].mean().round(2)
     average_plant_temp_ten_mins_ago = relevant_plant_recordings[relevant_plant_recordings['recording_taken'] > ten_minutes_ago][
-            'temperature'].mean().round(2)
+        'temperature'].mean().round(2)
     plant_recordings_previous_day = relevant_plant_recordings[
         relevant_plant_recordings['recording_taken'].dt.date > previous_day.date()]
-    botanist_data['num_plants'] = relevant_plant_recordings.groupby('botanist_id')['plant_id'].nunique().values
+    botanist_data['num_plants'] = relevant_plant_recordings.groupby('botanist_id')[
+        'plant_id'].nunique().values
     frames = [archived_data, relevant_plant_recordings]
 
     combined_recording_data = pd.concat(frames)
-    combined_recording_data['last_watered'] = pd.to_datetime(combined_recording_data['last_watered'])
+    combined_recording_data['last_watered'] = pd.to_datetime(
+        combined_recording_data['last_watered'])
     num_plants_watered_x_days_ago = \
         combined_recording_data[combined_recording_data['last_watered'].dt.date == x_days_ago.date()][
             'last_watered'].nunique()
@@ -120,13 +123,16 @@ if __name__ == "__main__":
                   botanist_num)
 
     with col3:
-        st.metric("Average of soil moisture (<10 mins) :droplet:", average_plant_moisture_ten_mins_ago)
+        st.metric("Average of soil moisture (<10 mins) :droplet:",
+                  average_plant_moisture_ten_mins_ago)
 
     with col4:
-        st.metric("Average temperature (<10 mins) :thermometer:", average_plant_temp_ten_mins_ago)
+        st.metric("Average temperature (<10 mins) :thermometer:",
+                  average_plant_temp_ten_mins_ago)
 
     with col5:
-        st.metric(f"Number of times watered {x_days} days ago :clock1:", num_plants_watered_x_days_ago)
+        st.metric(
+            f"Number of times watered {x_days} days ago :clock1:", num_plants_watered_x_days_ago)
 
     st.write(" ")
     left, middle, right = st.columns(3)
