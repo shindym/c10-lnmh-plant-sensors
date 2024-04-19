@@ -28,12 +28,12 @@ This folder contains all code and resources required for the dashboard.
 ## Files and Folders
 
 - root folder: Contains code related to the pipeline.
-    - `app.py` : python script responsible for running the dashboard.
+    - `app.py` : Python script responsible for running the dashboard.
     - `Dockerfile` - Contains the Dockerfile for the dashboard.
     - `README.md` - Contains the documentation for the dashboard.
     - `requirements.txt` - Contains the required packages for the dashboard.
 
-- `.streamlit` folder: holds dashboard theme configuration details
+- `.streamlit` folder: Holds dashboard theme configuration details
     - `config.toml` - Contains the configuration details for the dashboard.
 
 - `images` folder: Contains the images for the documentation.
