@@ -14,16 +14,16 @@
 
 - Full data pipeline, hosted in the cloud.
 - Short-term database solution that can store the data for the past 24 hours.
-- Long-term storage solution for all data older than 24 hours
+- Long-term storage solution for all data older than 24 hours.
 - Visualisation of the data.
 
 ### Dashboard Requirements
 
-The requirements are
+The requirements are:
 
-- To be able to view the data in real-time
-- View graphs of the latest temperature and moisture readings for every plant
-- To be able to view the data from the long-term storage
+- To be able to view the data in real-time.
+- View graphs of the latest temperature and moisture readings for every plant.
+- To be able to view the data from the long-term storage.
 
 ## Requirements
 
@@ -58,7 +58,7 @@ The requirements are
 
 ## Deployment
 
-- Run the following command to deploy the pipeline:
+- Run the following command to deploy the project:
   ```sh
   cd terraform
   terraform init
