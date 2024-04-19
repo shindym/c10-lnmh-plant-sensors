@@ -25,8 +25,8 @@ def connect_to_s3(config):
         """
         Returns s3 client object.
         """
-        s3 = client('s3', aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
-                    aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY'])
+        s3 = client('s3', aws_access_key_id=config['ACCESS_KEY_ID'],
+                    aws_secret_access_key=config['SECRET_ACCESS_KEY'])
         return s3
 
 
