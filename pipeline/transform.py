@@ -144,7 +144,6 @@ def send_alerts(conn) -> None:
             rows = cur.fetchall()
 
             this_plant = current[current["plant_id"] == plant].to_dict()
-            print(len(rows))
 
             if len(rows) == 3:
 

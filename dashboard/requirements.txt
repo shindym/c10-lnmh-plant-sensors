@@ -5,3 +5,4 @@ pymssql
 pylint
 pytest
 altair
+boto3

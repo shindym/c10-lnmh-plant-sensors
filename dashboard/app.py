@@ -26,6 +26,7 @@ def get_db_connection(config):
 
 
 def connect_to_s3(config):
+
     """
     Returns s3 client object.
     """
@@ -34,7 +35,7 @@ def connect_to_s3(config):
                 aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY'])
 
     return s3
-
+  
 
 def download_data_from_s3(client_obj) -> None:
     """
