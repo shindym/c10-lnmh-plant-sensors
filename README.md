@@ -17,6 +17,14 @@
 - Long-term storage solution for all data older than 24 hours
 - Visualisation of the data.
 
+### Dashboard Requirements
+
+The requirements are
+
+- To be able to view the data in real-time
+- View graphs of the latest temperature and moisture readings for every plant
+- To be able to view the data from the long-term storage
+
 ## Requirements
 
 ### Pre-requisites
@@ -49,6 +57,13 @@
 - `storage_folder`
 
 ## Deployment
+
+- Run the following command to deploy the pipeline:
+  ```sh
+  cd terraform
+  terraform init
+  terraform apply
+  ```
 
 ## Files and Folder Structure Explained
 
