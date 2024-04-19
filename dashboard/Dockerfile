@@ -3,7 +3,7 @@ FROM python:latest
 WORKDIR /app
 
 COPY requirements.txt .
-COPY .streamlit .
+COPY .streamlit/config.toml .streamlit/config.toml
 
 RUN pip3 install -r requirements.txt
 EXPOSE 8501
