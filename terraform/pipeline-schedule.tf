@@ -13,11 +13,11 @@ data "aws_iam_policy_document" "pipeline-schedule-permissions-policy" {
 }
 
 resource "aws_iam_role" "pipeline-schedule-role" {
-  name               = "c10-delta-schedule-role-terraform"
+  name               = "c10-delta-schedule-role-pipeline-terraform"
   assume_role_policy = data.aws_iam_policy_document.schedule-trust-policy.json
 
   inline_policy {
-    name   = "c10-delta-inline-lambda-execution-policy"
+    name   = "c10-delta-inline-lambda-execution-policy-pipeline"
     policy = data.aws_iam_policy_document.pipeline-schedule-permissions-policy.json
   }
 }
