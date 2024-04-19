@@ -1,4 +1,5 @@
-"""This file is responsible for transfer old data from the sql server to an s3 bucket"""
+"""This file is responsible for transfer old data from the sql server to an S3 bucket."""
+
 from os import environ
 
 from boto3 import client
