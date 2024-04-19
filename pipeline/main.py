@@ -12,7 +12,7 @@ def pipeline_process():
     # extract
     plants = get_all_plant_data()
     create_plant_csv(plants)
-    # transfer
+    # transform
     conn = get_db_connection(environ)
     clean_data(f"{environ['storage_folder']}/plant_data.csv")
     add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
@@ -31,10 +31,11 @@ def handler(event: dict = None, context: dict = None) -> dict:
     # extract
     plants = get_all_plant_data()
     create_plant_csv(plants)
-    # transfer
+    # transform
     conn = get_db_connection(environ)
     clean_data(f"{environ['storage_folder']}/plant_data.csv")
     add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
+    send_alerts(conn)
     # load
     conn = get_db_connection(environ)
     data_to_upload = convert_to_list(
