@@ -136,7 +136,6 @@ def send_alerts(conn):
                 "SELECT TOP 3 * FROM s_delta.recordings WHERE plant_id = %s ORDER BY recording_taken DESC;", plant)
             rows = cur.fetchall()
             this_plant = current[current["plant_id"] == plant].to_dict()
-            print(len(rows))
 
             if len(rows) == 3:
 
