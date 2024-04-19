@@ -1,6 +1,6 @@
-"""This file is responsible for loading the clean data into the database"""
+"""This file is responsible for loading the clean data into the database."""
 
-from os import path, environ
+from os import environ
 
 from dotenv import load_dotenv
 from pymssql import connect
@@ -29,7 +29,7 @@ def get_db_connection(config):
     )
 
 
-def convert_to_list(filename):
+def convert_to_list(filename: str) -> list or None:
     """
     Converts a DataFrame to a list of tuples.
     """
@@ -42,7 +42,7 @@ def convert_to_list(filename):
         return None
 
 
-def load_data(conn, data):
+def load_data(conn, data: list) -> None:
     """
     Loads the data into the database.
     """
