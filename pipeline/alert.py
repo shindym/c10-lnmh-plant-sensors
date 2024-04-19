@@ -11,8 +11,8 @@ class Alerter():
     def connect_to_ses_client(self, config):
         """ Returns sesv2 client object."""
 
-        return client('sesv2', aws_access_key_id=config['AWS_ACCESS_KEY_ID'],
-                      aws_secret_access_key=config['AWS_SECRET_ACCESS_KEY'])
+        return client('sesv2', aws_access_key_id=config['ACCESS_KEY_ID'],
+                      aws_secret_access_key=config['SECRET_ACCESS_KEY'])
 
     def get_email_addresses_from_names(self, names: list[str]) -> list[str]:
         """Returns a list of valid emails addresses from a list of names."""
