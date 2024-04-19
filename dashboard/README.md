@@ -51,12 +51,12 @@ This command runs and opens dashboard in your browser.
 In order to structure this dashboard effectively, a wireframe has been created to help identify what information we will
 be displaying as well as where it will be displayed.
 
-![Dashboard Wireframe](https://github.com/shindym/c10-lnmh-plant-sensors/blob/dashboard-readme/dashboard/images/plant-wireframe.png)
+![Dashboard Wireframe](https://github.com/shindym/c10-lnmh-plant-sensors/blob/main/dashboard/images/plant-wireframe.png)
 
 ### Dashboard
 
 This is the final look of the dashboard.
 
-![Final Dashboard](https://github.com/shindym/c10-lnmh-plant-sensors/blob/dashboard-readme/dashboard/images/plant-dashboard.png)
+![Final Dashboard](https://github.com/shindym/c10-lnmh-plant-sensors/blob/main/dashboard/images/plant-dashboard.png)
 
 
