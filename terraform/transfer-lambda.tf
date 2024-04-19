@@ -1,5 +1,5 @@
 resource "aws_iam_role" "transfer-lambda-role" {
-  name               = "c10-delta-transfer-terraform-lambda-role"
+  name               = "c10-delta-transfer-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.lambda-role-policy.json
 }
 
@@ -14,7 +14,7 @@ data "aws_ecr_image" "transfer-lambda-image" {
 
 resource "aws_lambda_function" "transfer-lambda" {
   role          = aws_iam_role.transfer-lambda-role.arn
-  function_name = "c10-delta-transfer-terraform-lambda"
+  function_name = "c10-delta-transfer-lambda"
   package_type  = "Image"
   image_uri     = data.aws_ecr_image.transfer-lambda-image.image_uri
   timeout       = 120

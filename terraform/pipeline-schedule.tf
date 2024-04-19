@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "pipeline-schedule-permissions-policy" {
 }
 
 resource "aws_iam_role" "pipeline-schedule-role" {
-  name               = "c10-delta-schedule-role-pipeline-terraform"
+  name               = "c10-delta-schedule-role-pipeline"
   assume_role_policy = data.aws_iam_policy_document.schedule-trust-policy.json
 
   inline_policy {
@@ -23,7 +23,7 @@ resource "aws_iam_role" "pipeline-schedule-role" {
 }
 
 resource "aws_scheduler_schedule" "pipeline-schedule" {
-  name                = "c10-delta-pipeline-schedule-terraform"
+  name                = "c10-delta-pipeline-schedule"
   group_name          = "default"
   schedule_expression = "cron(*/1 * * * ? *)"
 

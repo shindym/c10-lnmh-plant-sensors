@@ -1,5 +1,5 @@
 resource "aws_iam_role" "pipeline-lambda-role" {
-  name               = "c10-delta-pipeline-terraform-lambda-role"
+  name               = "c10-delta-pipeline-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.lambda-role-policy.json
 }
 
@@ -14,7 +14,7 @@ data "aws_ecr_image" "pipeline-lambda-image" {
 
 resource "aws_lambda_function" "pipeline-lambda" {
   role          = aws_iam_role.pipeline-lambda-role.arn
-  function_name = "c10-delta-pipeline-terraform-lambda"
+  function_name = "c10-delta-pipeline-lambda"
   package_type  = "Image"
   image_uri     = data.aws_ecr_image.pipeline-lambda-image.image_uri
   memory_size   = 150

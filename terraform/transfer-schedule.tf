@@ -13,7 +13,7 @@ data "aws_iam_policy_document" "transfer-schedule-permissions-policy" {
 }
 
 resource "aws_iam_role" "transfer-schedule-role" {
-  name               = "c10-delta-schedule-role-transfer-terraform"
+  name               = "c10-delta-schedule-role-transfer"
   assume_role_policy = data.aws_iam_policy_document.schedule-trust-policy.json
 
   inline_policy {
@@ -23,7 +23,7 @@ resource "aws_iam_role" "transfer-schedule-role" {
 }
 
 resource "aws_scheduler_schedule" "transfer-schedule" {
-  name                = "c10-delta-transfer-schedule-terraform"
+  name                = "c10-delta-transfer-schedule"
   group_name          = "default"
   schedule_expression = "cron(00 18 * * ? *)"
 

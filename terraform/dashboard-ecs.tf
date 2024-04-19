@@ -3,7 +3,7 @@ data "aws_iam_role" "ecs-role" {
 }
 
 resource "aws_ecs_task_definition" "dashboard-task-definition" {
-  family                = "c10-delta-dashboard-terraform"
+  family                = "c10-delta-dashboard"
   container_definitions = jsonencode([
     {
       name         = "dashboard"
@@ -95,7 +95,7 @@ data "aws_subnet" "subnet-3" {
 }
 
 resource "aws_security_group" "dashboard-security_group" {
-  name        = "c10-delta-dashboard-sg-terraform"
+  name        = "c10-delta-dashboard-sg"
   description = "Allows access through port 8501 for the dashboard"
   vpc_id      = data.aws_vpc.cohort-10-vpc.id
 
@@ -123,7 +123,7 @@ resource "aws_security_group" "dashboard-security_group" {
 
 resource "aws_ecs_service" "dashboard-service" {
 
-  name            = "c10-delta-dashboard-service-terraform"
+  name            = "c10-delta-dashboard-service"
   cluster         = data.aws_ecs_cluster.c10-ecs-cluster.id
   task_definition = aws_ecs_task_definition.dashboard-task-definition.arn
   launch_type     = "FARGATE"
