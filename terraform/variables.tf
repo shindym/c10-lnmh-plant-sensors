@@ -41,3 +41,8 @@ variable "storage_folder" {
 variable "LOCAL_FILE" {
     type = string
 }
+
+variable "VPC_ID" {
+    type = string
+}
+
