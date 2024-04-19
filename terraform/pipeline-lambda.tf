@@ -21,13 +21,15 @@ resource "aws_lambda_function" "pipeline-lambda" {
   timeout       = 300
   environment {
     variables = {
-      DB_HOST        = var.DB_HOST,
-      DB_NAME        = var.DB_NAME,
-      DB_USER        = var.DB_USER,
-      DB_PASSWORD    = var.DB_PASSWORD,
-      DB_PORT        = var.DB_PORT,
-      SCHEMA         = var.SCHEMA,
-      storage_folder = var.storage_folder
+      ACCESS_KEY_ID     = var.AWS_ACCESS_KEY_ID,
+      SECRET_ACCESS_KEY = var.AWS_SECRET_ACCESS_KEY,
+      DB_HOST           = var.DB_HOST,
+      DB_NAME           = var.DB_NAME,
+      DB_USER           = var.DB_USER,
+      DB_PASSWORD       = var.DB_PASSWORD,
+      DB_PORT           = var.DB_PORT,
+      SCHEMA            = var.SCHEMA,
+      storage_folder    = var.storage_folder
     }
   }
 }
