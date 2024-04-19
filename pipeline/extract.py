@@ -1,4 +1,4 @@
-"""This file is responsible for extracting data from the plant sensor API"""
+"""This file is responsible for extracting data from the plant sensor API."""
 
 from os import makedirs, path, environ
 import requests
