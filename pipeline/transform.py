@@ -1,4 +1,4 @@
-"""This file is responsible for cleaning and preparing plant data"""
+"""This file is responsible for cleaning and preparing plant data."""
 
 from os import path, environ
 
@@ -33,16 +33,19 @@ def extract_first_name_last_name(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     df[['botanist_first_name', 'botanist_last_name']
-       ] = df['botanist_name'].str.split(' ', expand=True)
+    ] = df['botanist_name'].str.split(' ', expand=True)
+
     first_name = df.pop("botanist_first_name")
     last_name = df.pop("botanist_last_name")
+
     df.insert(1, "botanist_first_name", first_name)
     df.insert(2, "botanist_last_name", last_name)
     df = df.drop('botanist_name', axis=1)
+
     return df
 
 
-def clean_data(filename: str):
+def clean_data(filename: str) -> None:
     """
     Checks that soil moisture is between 0 and 100,
     and temperature is between 0 and 50.
@@ -75,7 +78,7 @@ def clean_data(filename: str):
     df.to_csv(filename, index=False)
 
 
-def find_botanist_id(x, conn):
+def find_botanist_id(x, conn) -> int:
     """
     Checks cache to see if email has been seen before (and therefore the id too),
     if not will access the database and find the id corresponding with this email.
@@ -87,10 +90,11 @@ def find_botanist_id(x, conn):
                 "SELECT botanist_id FROM s_delta.botanist WHERE s_delta.botanist.email = %s", x)
             row = cur.fetchone()
         botanist_cache[x] = int(row["botanist_id"])
+
     return botanist_cache[x]
 
 
-def add_botanist_id(filename: str, conn):
+def add_botanist_id(filename: str, conn) -> None:
     """
     Shapes the data in a new csv for ease of use in the load script.
     Also adds a botanist id.
@@ -100,8 +104,9 @@ def add_botanist_id(filename: str, conn):
     df["botanist_id"] = df["botanist_email"].apply(
         find_botanist_id, args=(conn,))
     df = df.drop(
-        columns=["botanist_first_name", "botanist_last_name", "botanist_email", "botanist_phone", "plant_common_name",
-                 "plant_scientific_name", "origin_area", "origin_latitude", "origin_longitude"])
+        columns=["botanist_first_name", "botanist_last_name", "botanist_email",
+                 "botanist_phone", "plant_common_name", "plant_scientific_name",
+                 "origin_area", "origin_latitude", "origin_longitude"])
 
     # Rearranging columns to make it easier in the load script
     recording_taken = df.pop("recording_taken")
@@ -114,7 +119,7 @@ def add_botanist_id(filename: str, conn):
     df.to_csv(f"{environ['storage_folder']}/clean_plant_data.csv", index=False)
 
 
-def send_alerts(conn):
+def send_alerts(conn) -> None:
     """
     Determines if the current values of soil_moisture and temperature are alert-worthy,
     sends an alert if so.
@@ -130,27 +135,41 @@ def send_alerts(conn):
 
     # Checking for temperature fluctuations
     i = 0
+
     for plant in plants:
+
         with conn.cursor() as cur:
             cur.execute(
                 "SELECT TOP 3 * FROM s_delta.recordings WHERE plant_id = %s ORDER BY recording_taken DESC;", plant)
             rows = cur.fetchall()
+
             this_plant = current[current["plant_id"] == plant].to_dict()
             print(len(rows))
 
             if len(rows) == 3:
 
                 # Checks for temperature fluctuations (accounts for erroneous spikes)
-                if abs(rows[0]["temperature"] - rows[1]["temperature"]) > 5 and abs(this_plant["temperature"][i] - rows[0]["temperature"]) < 3 and abs(rows[1]["temperature"] - rows[2]["temperature"]) < 3:
+                if abs(rows[0]["temperature"] - rows[1]["temperature"]) > 5 and abs(
+                        this_plant["temperature"][i] - rows[0]["temperature"]) < 3 and abs(
+                        rows[1]["temperature"] - rows[2]["temperature"]) < 3:
+
                     # Send alert, temp fluctuation detected
                     alerter.send_plain_email(
-                        emails, plant, f"Temperature fluctuation detected for plant {plant}!")
+                        emails,
+                        plant,
+                        f"Temperature fluctuation detected for plant {plant}!"
+                    )
 
-                # Checks whether soil moisture is below 15, takes into account previous readings to avoid duplicate emails.
+                # Checks whether soil moisture is below 15,
+                # takes into account previous readings to avoid duplicate emails.
                 if all(x["soil_moisture"] > 15 for x in rows) and this_plant["soil_moisture"][i] < 15:
                     # Send alert, soil moisture too low
                     alerter.send_plain_email(
-                        emails, plant, f"Soil moisture below 15 for plant {plant}!")
+                        emails,
+                        plant,
+                        f"Soil moisture below 15 for plant {plant}!"
+                    )
+
             i += 1
 
 
@@ -160,5 +179,7 @@ if __name__ == "__main__":
     conn = get_db_connection(environ)
 
     clean_data(f"{environ['storage_folder']}/plant_data.csv")
+
     add_botanist_id(f"{environ['storage_folder']}/plant_data.csv", conn)
+
     send_alerts(conn)
